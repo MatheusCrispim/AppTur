@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.ShowInformation">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="68dp"
+            tools:layout_editor_absoluteY="0dp">
+
+            <ImageView
+                android:id="@+id/show_location_imagem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:scaleType="center"
+                app:srcCompat="@android:drawable/btn_star" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/show_descricao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/textView3"
+                    android:layout_marginStart="18dp"
+                    android:fontFamily="serif"
+                    android:padding="1dp"
+                    android:text="TextView"
+                    android:textAlignment="viewStart"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/show_location_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/show_descricao"
+                    android:layout_below="@+id/textView2"
+                    android:layout_gravity="center_vertical|right"
+                    android:fontFamily="serif"
+                    android:padding="1dp"
+                    android:text="TextView"
+                    android:textSize="12sp"
+                    android:typeface="normal" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/show_descricao"
+                    android:layout_below="@+id/show_descricao"
+                    android:layout_marginTop="13dp"
+                    android:fontFamily="serif"
+                    android:text="@string/lbDescricao"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignStart="@+id/show_descricao"
+                    android:layout_marginTop="32dp"
+                    android:fontFamily="serif"
+                    android:text="@string/lbName"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/desc_mapa"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Localização"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapa"
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:padding="10dp" />
+        </LinearLayout>
+
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

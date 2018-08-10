@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AppTur</string>
+    <string name="title_activity_main">AppTur</string>
+    <string name="lbDescricao">Descrição</string>
+    <string name="lbName">Nome</string>
+    <string name="title_activity_notificacao">Notificação</string>
+</resources>
