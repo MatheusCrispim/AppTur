@@ -4,25 +4,23 @@ package com.br.apptur.view;
  * Created by treck on 24/07/18.
  */
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 
-import com.br.apptur.R;
 import com.br.apptur.control.Controller;
-import com.br.apptur.model.exception.NadaEncontradoException;
+import com.br.apptur.model.exception.NothingFounException;
+import com.br.apptur.model.restful.LoadLocalidade;
 import com.br.apptur.object.Localidade;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,16 +29,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
-
-import static android.content.Context.LOCATION_SERVICE;
-
-
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -80,15 +71,20 @@ public class GPSFragment extends SupportMapFragment implements OnMapReadyCallbac
 
             mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
 
+
             locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+
+            LoadDynamicUi load=new LoadDynamicUi(mMap);
+            Location[] locations= {locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)};
+
+
+            //cria uma piscina de execuções, onde varias threads podem ser executadas simultaneamente.
+            load.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, locations);
 
             /*Location[] locations= {locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)};
             LoadDynamicUi loadDynamicUi=new LoadDynamicUi(mMap);
             loadDynamicUi.execute(locations);
             */
-
-            MapsFunction fn=new MapsFunction(mMap);
-            fn.adicionaPontos();
 
             // Log.e(TAG, "Irr", ex);
             //LatLng sydney = new LatLng(-33.852, 151.211);
@@ -229,7 +225,7 @@ public class GPSFragment extends SupportMapFragment implements OnMapReadyCallbac
                 }
             }
         }
-        catch (NadaEncontradoException e) {
+        catch (NothingFounException e) {
             e.printStackTrace();
         }
     }

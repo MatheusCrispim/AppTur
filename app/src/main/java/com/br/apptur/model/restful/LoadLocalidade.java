@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class LoadLocalidade{
     private ReadRest rdr;
-    private final String API_PATH="http://35.237.214.46/view/listar.php?";
+    private final String API_PATH="http://35.227.38.84/view/listar.php?";
     //search the locale for the column
     public ArrayList<Localidade> getLocalidades(String column, String value){
 

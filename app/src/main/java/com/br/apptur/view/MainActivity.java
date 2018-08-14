@@ -1,25 +1,15 @@
 package com.br.apptur.view;
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.br.apptur.R;
-import com.br.apptur.control.Controller;
 import com.br.apptur.control.Permissions;
-import com.br.apptur.model.exception.NadaEncontradoException;
-import com.br.apptur.model.restful.ReadRest;
-import com.br.apptur.object.Localidade;
-
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by treck on 26/07/18.

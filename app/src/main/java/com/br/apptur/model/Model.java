@@ -4,9 +4,7 @@ package com.br.apptur.model;
  * Created by treck on 12/07/18.
  */
 
-import android.util.Log;
-
-import com.br.apptur.model.exception.NadaEncontradoException;
+import com.br.apptur.model.exception.NothingFounException;
 import com.br.apptur.model.restful.LoadLocalidade;
 import com.br.apptur.object.Localidade;
 
@@ -29,7 +27,7 @@ public class Model {
 
 
     //Return the locale for the id
-    public Localidade getLocalidade(int id) throws NadaEncontradoException {
+    public Localidade getLocalidade(int id) throws NothingFounException {
         Localidade localidade=null;
         //Verifica se a Localidade já está no array
         for(Localidade localidadeTmp: this.localidades){
@@ -51,14 +49,14 @@ public class Model {
             }
         }
         if(localidade==null){
-            throw new NadaEncontradoException();
+            throw new NothingFounException();
         }
         return localidade;
     }
 
 
     //Return the locale for the value
-    public List<Localidade> getLocalidades(String value)  throws NadaEncontradoException{
+    public List<Localidade> getLocalidades(String value)  throws NothingFounException {
         ArrayList<Localidade> localidadesL=new ArrayList<>();
 
         //Verifica se a Localidade já está no array
@@ -82,14 +80,14 @@ public class Model {
         }
 
         if(localidadesL==null){
-            throw new NadaEncontradoException();
+            throw new NothingFounException();
         }
         return localidadesL;
     }
 
 
     //Melhorar essa lógica
-    public List<Localidade> getLocalidadesProximas(double latitude, double longitude) throws NadaEncontradoException{
+    public List<Localidade> getLocalidadesProximas(double latitude, double longitude) throws NothingFounException {
         ArrayList<Localidade> localidadesTmp=this.loadLocalidade.getLocalidadesProximas(latitude, longitude);
 
         if(localidadesTmp!=null){
@@ -102,7 +100,7 @@ public class Model {
             }
             return localidadesTmp;
         }
-        throw new NadaEncontradoException();
+        throw new NothingFounException();
     }
 
 
