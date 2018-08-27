@@ -17,9 +17,10 @@ import java.util.ArrayList;
  */
 
 public class LoadLocalidade{
+
     private ReadRest rdr;
-    private final String API_PATH="http://35.227.38.84/view/listar.php?";
-    //search the locale for the column
+    private final String API_PATH="http://35.190.158.194/view/listar.php?";
+
     public ArrayList<Localidade> getLocalidades(String column, String value){
 
         ArrayList<String> localidadesStr;
@@ -52,26 +53,30 @@ public class LoadLocalidade{
         ArrayList<Localidade> localidades=null;
         String apiPath = API_PATH+"latitude="+latitude+"&longitude="+longitude;
         this.rdr=new ReadRest("Logado", apiPath, "GET");
-        try {
-            localidadesStr=rdr.execute().get();
 
+        try {
+
+            localidadesStr=rdr.execute().get();
             if(localidadesStr!=null){
                 localidades=this.createLocalidades(localidadesStr);
-
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return localidades;
     }
 
 
     protected ArrayList<Localidade> createLocalidades(ArrayList<String> localidadesStr){
+
         ArrayList<Localidade> localidades=new ArrayList<>();
         for(String localidadeStr: localidadesStr){
             //Cria o objeto localidade a partir do json retornado pela api
             localidades.add(new Gson().fromJson(localidadeStr, Localidade.class));
         }
+
         return  localidades;
     }
 

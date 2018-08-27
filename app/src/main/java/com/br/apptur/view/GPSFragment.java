@@ -20,7 +20,6 @@ import android.view.View;
 
 import com.br.apptur.control.Controller;
 import com.br.apptur.model.exception.NothingFounException;
-import com.br.apptur.model.restful.LoadLocalidade;
 import com.br.apptur.object.Localidade;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -63,12 +62,9 @@ public class GPSFragment extends SupportMapFragment implements OnMapReadyCallbac
 
             // Botão de zoom
             mMap.getUiSettings().setZoomControlsEnabled(true);
-
             // Ativa uma opção para buscar a localização
             mMap.setMyLocationEnabled(true);
-
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
             mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
 
 
@@ -77,20 +73,13 @@ public class GPSFragment extends SupportMapFragment implements OnMapReadyCallbac
             LoadDynamicUi load=new LoadDynamicUi(mMap);
             Location[] locations= {locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)};
 
-
-            //cria uma piscina de execuções, onde varias threads podem ser executadas simultaneamente.
+            //cria uma piscina de execuções, onde várias threads podem ser executadas simultaneamente.
             load.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, locations);
 
-            /*Location[] locations= {locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)};
-            LoadDynamicUi loadDynamicUi=new LoadDynamicUi(mMap);
-            loadDynamicUi.execute(locations);
-            */
 
-            // Log.e(TAG, "Irr", ex);
-            //LatLng sydney = new LatLng(-33.852, 151.211);
-            //googleMap.addMarker(new MarkerOptions().position(sydney)
-              ///      .title("Marker in Sydney"));
-            //googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            //
+            mMap.setOnMarkerClickListener(this);
+
         } catch (SecurityException ex) {
             Log.e(TAG, "Error", ex);
         }
@@ -98,6 +87,8 @@ public class GPSFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public void onMapClick(LatLng latLng) {
+
+
     }
 
     @Override
@@ -163,31 +154,6 @@ public class GPSFragment extends SupportMapFragment implements OnMapReadyCallbac
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
                 num++;
             }
-
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker)
-                {
-                    try
-                    {
-                        Localidade local = (Localidade) marker.getTag();
-
-                        Intent i = new Intent(getActivity(), ShowInformation.class);
-
-                        i.putExtra("id", local.getId());
-                        i.putExtra("nome", local.getNome());
-                        i.putExtra("descricao", local.getDescricao());
-                        i.putExtra("imagem", local.getURLImagem());
-                        i.putExtra("latitude", local.getLatitude());
-                        i.putExtra("longitude", local.getLongitude());
-                        startActivity(i);
-
-                        return true;
-                    }
-                    catch (Exception e){ return false; }
-
-                }
-            });
         }*/
     }
 
@@ -255,8 +221,24 @@ public class GPSFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        return false;
+
+        try {
+            Localidade local = (Localidade) marker.getTag();
+            Intent i = new Intent(getActivity(), ShowInformation.class);
+
+            i.putExtra("id", local.getId());
+            i.putExtra("nome", local.getNome());
+            i.putExtra("descricao", local.getDescricao());
+            i.putExtra("imagem", local.getURLImagem());
+            i.putExtra("latitude", local.getLatitude());
+            i.putExtra("longitude", local.getLongitude());
+
+            startActivity(i);
+
+            return true;
+        }catch (Exception e){ return false; }
     }
+
 
 
     public void gerarNotificacao(String nome, String descricao)

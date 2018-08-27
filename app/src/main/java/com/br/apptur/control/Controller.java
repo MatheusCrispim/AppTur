@@ -10,6 +10,7 @@ import com.br.apptur.object.Localidade;
 
 import java.util.List;
 
+
 public class Controller {
 
     private Model model;
