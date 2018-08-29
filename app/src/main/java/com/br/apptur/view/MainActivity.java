@@ -1,6 +1,5 @@
 package com.br.apptur.view;
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -10,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.br.apptur.R;
-import com.br.apptur.control.Permissions;
 
 /**
  * Created by treck on 26/07/18.
@@ -19,14 +17,12 @@ import com.br.apptur.control.Permissions;
 public class MainActivity extends AppCompatActivity {
 
 
-    private Permissions permissions;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //this.permissions.setAccessFineLocation(this);
 
         //Check if permission already is active
         int permissionCheck = ContextCompat.checkSelfPermission(this,
