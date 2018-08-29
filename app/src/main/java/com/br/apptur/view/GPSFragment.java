@@ -18,8 +18,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 
-import com.br.apptur.control.Controller;
-import com.br.apptur.model.exception.NothingFounException;
 import com.br.apptur.object.Localidade;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,134 +25,67 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.util.ArrayList;
 
 import static android.content.Context.LOCATION_SERVICE;
 
 public class GPSFragment extends SupportMapFragment implements OnMapReadyCallback,
         GoogleMap.OnMapClickListener, LocationListener, GoogleMap.OnMarkerClickListener, GoogleMap.InfoWindowAdapter {
 
-    private static final String TAG = "GPSFragment";
-    private int num = 0;
-    private Controller controller = new Controller();
-    private GoogleMap mMap;
+    private GoogleMap map;
     private LocationManager locationManager;
-    PolylineOptions rectOptions = new PolylineOptions();
-    ArrayList<LatLng> rotas = new ArrayList<LatLng>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getMapAsync(this);
-
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         try {
-            locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+            //user's locale manager
+            this.locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+            this.map = googleMap;
 
-            mMap = googleMap;
-            mMap.setOnMapClickListener(this);
+            //Enable some settings for the maps
+            this.map.setMyLocationEnabled(true);
+            this.map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            this.map.setOnMarkerClickListener(this);
+            this.map.getUiSettings().setZoomControlsEnabled(true);
 
-            // Botão de zoom
-            mMap.getUiSettings().setZoomControlsEnabled(true);
-            // Ativa uma opção para buscar a localização
-            mMap.setMyLocationEnabled(true);
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+            //Zoom into user's locale when launching app
+            this.map.animateCamera(CameraUpdateFactory.zoomTo(18));
 
 
-            locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-
-            LoadDynamicUi load=new LoadDynamicUi(mMap);
+            //Loads the dynamic elements in the map
+            LoadDynamicUi load=new LoadDynamicUi(map);
+            //Get the user's locale
             Location[] locations= {locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)};
-
-            //cria uma piscina de execuções, onde várias threads podem ser executadas simultaneamente.
+            //Executes the pool of threads that loads the Dynamic UI in the map
             load.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, locations);
 
-
-            //
-            mMap.setOnMarkerClickListener(this);
-
         } catch (SecurityException ex) {
-            Log.e(TAG, "Error", ex);
+            //Carry out treatment after
         }
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
-
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        // Ativa o GPS
-        locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-
-      //  locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1, this);
-
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
-        locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-        locationManager.removeUpdates(this);
     }
 
     @Override
     public void onLocationChanged(Location location) {
-
-        // Define das coordenadas
-        /*
-        if(location != null)
-        {
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-            if (num != 0)
-            {
-                //mMap.clear();
-
-                Marker ponto = mMap.addMarker(new MarkerOptions().position(latLng).visible(false));
-
-                //addRaio(latLng);
-                adicionaPontos(latLng);
-
-                rotas.add(latLng);
-
-                rectOptions.add(latLng);
-                Polyline polyline = mMap.addPolyline(rectOptions);
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
-            }
-
-            else
-            {
-                Marker ponto = mMap.addMarker(new MarkerOptions().position(latLng).title("Você!"));
-                ponto.showInfoWindow();
-                //addRaio(latLng);
-
-                adicionaPontos(latLng);
-
-                rotas.add(latLng);
-
-                rectOptions.add(latLng);
-                Polyline polyline = mMap.addPolyline(rectOptions);
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
-                num++;
-            }
-        }*/
     }
 
     @Override
@@ -165,47 +96,6 @@ public class GPSFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public void onProviderDisabled(String provider) {}
-
-
-    // Procura por pontos próximos à localidade atual
-    // Adiciona os pontos encontrados no mapa
-    public void adicionaPontos(LatLng coordenadas)
-    {
-        ArrayList<Localidade> local;
-
-        try {
-            local = (ArrayList<Localidade>) controller.getLocalidadesProximas(coordenadas.latitude, coordenadas.longitude);
-
-            if(local != null)
-            {
-                for(Localidade localidade : local)
-                {
-                    LatLng latg = new LatLng(localidade.getLatitude(), localidade.getLongitude());
-                    Marker ponto = mMap.addMarker(new MarkerOptions().position(latg).title(localidade.getNome()));
-                    ponto.showInfoWindow();
-                    ponto.setTag(localidade);
-
-                    // A cada novo ponto adicionado, uma nova notificação é lançada
-                    gerarNotificacao(localidade.getNome(), localidade.getDescricao());
-
-                }
-            }
-        }
-        catch (NothingFounException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /*
-    public void addRaio(LatLng latLng)
-    {
-        CircleOptions circleOptions = new CircleOptions()
-                .center(latLng)
-                .radius(100)
-                .visible(true);
-        mMap.addCircle(circleOptions);
-    }
-    */
 
 
     @Override
@@ -224,7 +114,7 @@ public class GPSFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         try {
             Localidade local = (Localidade) marker.getTag();
-            Intent i = new Intent(getActivity(), ShowInformation.class);
+            Intent i = new Intent(getContext(), ShowInformation.class);
 
             i.putExtra("id", local.getId());
             i.putExtra("nome", local.getNome());
@@ -232,7 +122,7 @@ public class GPSFragment extends SupportMapFragment implements OnMapReadyCallbac
             i.putExtra("imagem", local.getURLImagem());
             i.putExtra("latitude", local.getLatitude());
             i.putExtra("longitude", local.getLongitude());
-
+            Log.e("Retorno", String.valueOf(i));
             startActivity(i);
 
             return true;

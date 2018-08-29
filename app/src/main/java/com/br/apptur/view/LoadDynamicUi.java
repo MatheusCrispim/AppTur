@@ -2,8 +2,6 @@ package com.br.apptur.view;
 
 import android.location.Location;
 import android.os.AsyncTask;
-import android.util.Log;
-
 import com.br.apptur.control.Controller;
 import com.br.apptur.model.exception.NothingFounException;
 import com.br.apptur.object.Localidade;
@@ -15,6 +13,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 /**
+ * @author :  Matheus Guedes Crispim
  * Created by treck on 26/07/18.
  */
 
@@ -54,7 +53,7 @@ public class LoadDynamicUi extends AsyncTask<Location, Object, Void> {
             }
 
         } catch (NothingFounException e) {
-            //Realizar tratamento de forma diferente
+            //Carry out treatment after
         }
 
         return null;
@@ -66,11 +65,6 @@ public class LoadDynamicUi extends AsyncTask<Location, Object, Void> {
 
         this.marker=map.addMarker((MarkerOptions) objects[0]);
         this.marker.setTag((Localidade) objects[1]);
-        Localidade ld= (Localidade) objects[1];
-        Log.e("Retornou", String.valueOf(ld.getId()));
-        //LatLng sydney = new LatLng(-33.852, 151.211);
-        //map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        //ponto.showInfoWindow();
     }
 
 }
