@@ -59,9 +59,10 @@ public class GPSFragment extends SupportMapFragment implements OnMapReadyCallbac
 
 
             //Loads the dynamic elements in the map
-            LoadDynamicUi load=new LoadDynamicUi(map);
+            LoadDynamicUi load = new LoadDynamicUi(map);
             //Get the user's locale
-            Location[] locations= {locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)};
+            Location[] locations = { locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) };
+            Log.i("Locations", Double.toString(locations.length));
             //Executes the pool of threads that loads the Dynamic UI in the map
             load.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, locations);
 
