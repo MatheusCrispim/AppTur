@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.br.apptur.R;
 
@@ -16,6 +18,7 @@ import com.br.apptur.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    SearchView search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        search = (SearchView) findViewById(R.id.searchView);
+
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(getBaseContext(), query, Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) { return false; }
+        });
 
         //Check if permission already is active
         int permissionCheck = ContextCompat.checkSelfPermission(this,

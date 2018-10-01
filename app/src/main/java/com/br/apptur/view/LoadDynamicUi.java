@@ -2,6 +2,8 @@ package com.br.apptur.view;
 
 import android.location.Location;
 import android.os.AsyncTask;
+import android.util.Log;
+
 import com.br.apptur.control.Controller;
 import com.br.apptur.model.exception.NothingFounException;
 import com.br.apptur.object.Localidade;
@@ -36,8 +38,11 @@ public class LoadDynamicUi extends AsyncTask<Location, Object, Void> {
 
         try {
 
+            Log.i("Erros", Integer.toString(locations.length));
             this.latitude=locations[0].getLatitude();
             this.longitude=locations[0].getLongitude();
+
+            Log.i("Erros2", Integer.toString(locations.length));
 
             List<Localidade> localidades = controller.getLocalidadesProximas(this.latitude,  this.longitude);
 

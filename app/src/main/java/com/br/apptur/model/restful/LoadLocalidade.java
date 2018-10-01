@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class LoadLocalidade{
 
     private ReadRest rdr;
-    private final String API_PATH="http://35.190.158.194/view/listar.php?";
+    private final String API_PATH="http://54.233.128.103/API-AppTur/view/listar.php?";
 
     public ArrayList<Localidade> getLocalidades(String column, String value){
 
